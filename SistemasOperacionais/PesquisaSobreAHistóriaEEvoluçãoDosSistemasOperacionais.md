@@ -85,6 +85,9 @@ Entregue a linha do tempo em formato digital (PDF, imagem ou apresentação).
     - Sistemas operacionais modernos (2010 em diante) \
         Os sistemas operacionais comecam a focar menos em PCs. 2013 - Firefox OS, 2013 - Ubuntu Touch, 2011 - Chrome OS, 2010 - Windows Phone; Esses foram tentativas para competir com Android e iOS.
 
+## Mapa mental
+
+[canva.com](https://www.canva.com/design/DAGNL_14RLY/q7oJKju8aVXXukTS97hgwA/edit?utm_content=DAGNL_14RLY&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
 ## Referencia
 
