@@ -65,21 +65,29 @@ Entregue a linha do tempo em formato digital (PDF, imagem ou apresentação).
         ![alt text](img/UsuárioTrabalhandoNoIBM7090NoSOCTSS.png) \
         Em 1953, surgiu o sistema operacional chamado Multics, que foi um projeto realizado em parceria com o Instituto de Tecnologia Massachusetts (MIT), pela General Eletric (GE) e pelos laboratórios Bell (Bell Labs) e American Telephone and Telegraph (AT&T). A intenção era de que o Multics tivesse características de tempo compartilhado (vários usuários compartilhando os recursos de um único computador), sendo assim o sistema mais arrojado da época. Em 1969, já existia uma versão do Multics rodando num computador GE645. \
         ![alt Equipe de desenvolvimento do SO Multics](img/EquipeDeDesenvolvimentoDoSOMultics.png)
-        Ref=[Instituto Federal de Educação, Ciência e Tecnologia, Sul-rio-grandense. - 1.2 História dos Sistemas Operacionais](http://uab.ifsul.edu.br/tsiad/conteudo/modulo1/sop/ua/at2/03.html)
     - Sistemas operacionais da década de 1970. \
         Na década de 70, quando começaram a surgir os primeiros computadores pessoais, houve a necessidade de um sistema operacional de fácil operacionalização (já que, desde então, os sistemas operacionais não facilitavam a vida do usuário leigo) \
         O Unix é um sistema operacional criado no início dos anos 70, principalmente por Dennis Ritchie e Ken Thompson. Suas principais características técnicas são sua portabilidade, sua capacidade de multi-usuário e de multitarefa, eficiência, alta segurança e o bom desempenho em tarefas de rede.
-        Ref=[Instituto Federal de Educação, Ciência e Tecnologia, Sul-rio-grandense. - 1.2 História dos Sistemas Operacionais](http://uab.ifsul.edu.br/tsiad/conteudo/modulo1/sop/ua/at2/03.html)[Sistemas operacionais: a família Unix](https://edu.gcfglobal.org/pt/conhecimentos-tecnologicos/sistemas-operacionais-a-familia-unix/1/)
     - Evolução nos anos 1980. \
         Entre 1977 e 1981, a AT&T, alterou o Unix, fazendo algumas mudanças particulares e lançou o System III. Em 1983, após mais uma série de modificações, foi lançado o conhecido Unix System IV. Até hoje esse sistema é usado no mercado, tornando-se o padrão internacional do Unix, comercializado por empresas como IBM, HP, Sun. \
         ![alt Ken Thompson e Dennis Ritchie em um computador PDP-11, desenvolvem o SO Unix](img/KenThompsonEDennisRitchieEmUmComputadorPDP11DesenvolvemOSOUnix.png) \
         Então, em 1980, William (Bill) Gates e seu colega de faculdade, Paul Allen, fundadores da Microsoft (Figura 6.), compraram o sistema QDOS ("Quick and Dirty Operating System") de Tim Paterson por 50.000 dólares, batizaram-no de DOS (Disk Operating System) e licenciaram o software à IBM (Figura 7). O DOS fez tanto sucesso que foi utilizado como base para a tão conhecida família Windows. \
         ![alt Paul Allen e Bill Gates](img/PaulAllen-BillGates.png)
         ![alt Vista Parcial de um computador com o SO DOS](img/VistaParcialDeUmComputadorComOSODOS.png) \
-        Ref=[Instituto Federal de Educação, Ciência e Tecnologia, Sul-rio-grandense. - 1.2 História dos Sistemas Operacionais](http://uab.ifsul.edu.br/tsiad/conteudo/modulo1/sop/ua/at2/03.html)
     - Avanços nos anos 1990 \
         No começo dos anos 90, um estudante de computação finlandês publicou em uma lista de discussão da Internet, que estava desenvolvendo um núcleo de um sistema operacional e perguntou se alguém gostaria de auxiliá-lo nesta tarefa. Este estudante chamava-se Linus Torvalds e o primeiro passo em direção ao tão conhecido Linux foi dado naquele momento. \
         ![alt Linus Torvalds](img/LinusTorvalds.png)
         ![alt Vista parcial de um computador com o SO Linux](img/VistaParcialDeUmComputadorComOSOLinux.png) \
         No início dos anos 90, Linus Torvalds começou a escrever um sistema operacional que podia ser executado em um computador pessoal da época. Ao mesmo tempo, um outro projeto estava sendo desenvolvido com a intenção de criar um sistema operacional tipo Unix gratuito: o projetoGNU. Este projeto tinha muitas ferramentas prontas, mas faltava o núcleo do sistema. Era uma questão de tempo para que o núcleo Linux fosse distribuído juntamente com as ferramentas GNU, dando origem ao que hoje conhecemos comoGNU/Linux, ou simplesmente Linux, um sistema operacional livre da família Unix. \
-        Ref=[Instituto Federal de Educação, Ciência e Tecnologia, Sul-rio-grandense. - 1.2 História dos Sistemas Operacionais](http://uab.ifsul.edu.br/tsiad/conteudo/modulo1/sop/ua/at2/03.html)[Sistemas operacionais: a família Unix](https://edu.gcfglobal.org/pt/conhecimentos-tecnologicos/sistemas-operacionais-a-familia-unix/1/)
+        Primeiro Windows realmente chamado Windows, Windows 95.
+    - Sistemas operacionais no início dos anos 2000 \
+        Windows 2000, um dos antecessores do windows server atual.  Windows XP em 2001. Inicio do Ubuntu em 2004. Inicio do Linux Mint em 2006. 2007 - iOS. O grandioso Android em 2008 maior SO ate hoje 2024.
+    - Sistemas operacionais modernos (2010 em diante) \
+        Os sistemas operacionais comecam a focar menos em PCs. 2013 - Firefox OS, 2013 - Ubuntu Touch, 2011 - Chrome OS, 2010 - Windows Phone; Esses foram tentativas para competir com Android e iOS.
+
+
+## Referencia
+
+[tecmundo - A história dos sistemas operacionais infográfico](https://www.tecmundo.com.br/linux/2031-a-historia-dos-sistemas-operacionais.htm) \
+[Instituto Federal de Educação, Ciência e Tecnologia, Sul-rio-grandense. - 1.2 História dos Sistemas Operacionais](http://uab.ifsul.edu.br/tsiad/conteudo/modulo1/sop/ua/at2/03.html) \
+[Sistemas operacionais: a família Unix](https://edu.gcfglobal.org/pt/conhecimentos-tecnologicos/sistemas-operacionais-a-familia-unix/1/) \
