@@ -94,3 +94,4 @@ Entregue a linha do tempo em formato digital (PDF, imagem ou apresentação).
 [tecmundo - A história dos sistemas operacionais infográfico](https://www.tecmundo.com.br/linux/2031-a-historia-dos-sistemas-operacionais.htm) \
 [Instituto Federal de Educação, Ciência e Tecnologia, Sul-rio-grandense. - 1.2 História dos Sistemas Operacionais](http://uab.ifsul.edu.br/tsiad/conteudo/modulo1/sop/ua/at2/03.html) \
 [Sistemas operacionais: a família Unix](https://edu.gcfglobal.org/pt/conhecimentos-tecnologicos/sistemas-operacionais-a-familia-unix/1/) \
+[Debian org](https://www.debian.org/intro/about.pt.html)
