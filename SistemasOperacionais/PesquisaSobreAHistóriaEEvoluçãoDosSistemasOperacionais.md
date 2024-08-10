@@ -60,6 +60,7 @@ Entregue a linha do tempo em formato digital (PDF, imagem ou apresentação).
 
 1. parte horizontal
     - Primeiros sistemas operacionais (décadas de 1950 e 1960): \
+        ENIAC, Criado pela Universidade da Pensilvânia. Precisão para tabelas de faixa e trajetória das armas. Usava um sistema decimal 10 Válvulas para cada dígito
         Na década de 60, os primeiros "sistemas operacionais" eram únicos, pois cada computador era vendido com um sistema operacional específico. Isto gerava grandes problemas, pois resultava em arquiteturas diferentes e de pessoal especializado que entendesse de cada sistema operacional. Após essa fase, iniciou-se a pesquisa de sistemas operacionais que automatizassem as tarefas, pois os sistemas eram monousuários e tinham cartões perfurados como entradas (eliminando, assim, o trabalho de pessoas que eram contratadas apenas para trocar os cartões perfurados). \
         Um dos primeiros sistemas operacionais que tiveram destaque, o CTSS, desenvolvido pelo Centro Computacional Instituto de Tecnologia Massachusetts (MIT). A versão do CTSS, disponibilizada para usuários, foi demonstrada no IBM 7090 no MIT em novembro de 1961 e começou a funcionar efetivamente em 1963, onde foi utilizada por pesquisadores de computadores dos Estados Unidos. \
         ![alt text](img/UsuárioTrabalhandoNoIBM7090NoSOCTSS.png) \
@@ -74,6 +75,7 @@ Entregue a linha do tempo em formato digital (PDF, imagem ou apresentação).
         Então, em 1980, William (Bill) Gates e seu colega de faculdade, Paul Allen, fundadores da Microsoft (Figura 6.), compraram o sistema QDOS ("Quick and Dirty Operating System") de Tim Paterson por 50.000 dólares, batizaram-no de DOS (Disk Operating System) e licenciaram o software à IBM (Figura 7). O DOS fez tanto sucesso que foi utilizado como base para a tão conhecida família Windows. \
         ![alt Paul Allen e Bill Gates](img/PaulAllen-BillGates.png)
         ![alt Vista Parcial de um computador com o SO DOS](img/VistaParcialDeUmComputadorComOSODOS.png) \
+        MS-DOS / IBM PC DOS. O software foi muito bem aceito e recebeu modificações ao longo dos anos. Já na versão 2.0, o MS-DOS suportava HDs de 10 MB e estrutura de arquivos “em árvore”. Na próxima etapa, a Microsoft adicionou o FAT16 e suporte para redes. Assim foi o começo do que hoje é o Windows.
     - Avanços nos anos 1990 \
         No começo dos anos 90, um estudante de computação finlandês publicou em uma lista de discussão da Internet, que estava desenvolvendo um núcleo de um sistema operacional e perguntou se alguém gostaria de auxiliá-lo nesta tarefa. Este estudante chamava-se Linus Torvalds e o primeiro passo em direção ao tão conhecido Linux foi dado naquele momento. \
         ![alt Linus Torvalds](img/LinusTorvalds.png)
@@ -95,3 +97,4 @@ Entregue a linha do tempo em formato digital (PDF, imagem ou apresentação).
 [Instituto Federal de Educação, Ciência e Tecnologia, Sul-rio-grandense. - 1.2 História dos Sistemas Operacionais](http://uab.ifsul.edu.br/tsiad/conteudo/modulo1/sop/ua/at2/03.html) \
 [Sistemas operacionais: a família Unix](https://edu.gcfglobal.org/pt/conhecimentos-tecnologicos/sistemas-operacionais-a-familia-unix/1/) \
 [Debian org](https://www.debian.org/intro/about.pt.html)
+http://docente.ifsc.edu.br/alex.forghieri/MaterialDidatico/Sistemas%20Operacionais/Material%20das%20aulas/01%20-%2006-04-2016/ParteI-HistoriaSistemasOperacionais.pdf
