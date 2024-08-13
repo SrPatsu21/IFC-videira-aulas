@@ -96,9 +96,8 @@ Entregue a linha do tempo em formato digital (PDF, imagem ou apresentação).
 [tecmundo - A história dos sistemas operacionais infográfico](https://www.tecmundo.com.br/linux/2031-a-historia-dos-sistemas-operacionais.htm) \
 [Instituto Federal de Educação, Ciência e Tecnologia, Sul-rio-grandense. - 1.2 História dos Sistemas Operacionais](http://uab.ifsul.edu.br/tsiad/conteudo/modulo1/sop/ua/at2/03.html) \
 [Sistemas operacionais: a família Unix](https://edu.gcfglobal.org/pt/conhecimentos-tecnologicos/sistemas-operacionais-a-familia-unix/1/) \
-[Debian org](https://www.debian.org/intro/about.pt.html)
-[Instituto federal de Sanra Catarina - História e Conceitos sobre Sistemas Operacionais](http://docente.ifsc.edu.br/alex.forghieri/MaterialDidatico/Sistemas%20Operacionais/Material%20das%20aulas/01%20-%2006-04-2016/ParteI-HistoriaSistemasOperacionais.pdf)
-[ICMC - Histórico dos Sistemas Operacionais](http://lasdpc.icmc.usp.br/~ssc640/grad/bcc2015/grupoa01/)
-[Timeline of Computer History](https://www.computerhistory.org/timeline/1956/)
-
-http://bitsavers.org/pdf/ibm/705/22-6726-1_autocoder_Feb57.pdf
+[Debian org](https://www.debian.org/intro/about.pt.html) \
+[Instituto federal de Sanra Catarina - História e Conceitos sobre Sistemas Operacionais](http://docente.ifsc.edu.br/alex.forghieri/MaterialDidatico/Sistemas%20Operacionais/Material%20das%20aulas/01%20-%2006-04-2016/ParteI-HistoriaSistemasOperacionais.pdf) \
+[ICMC - Histórico dos Sistemas Operacionais](http://lasdpc.icmc.usp.br/~ssc640/grad/bcc2015/grupoa01/) \
+[Timeline of Computer History](https://www.computerhistory.org/timeline/1956/) \
+[pplware - Conheça a evolução das memórias RAM](https://pplware.sapo.pt/gadgets/hardware/conheca-evolucao-memorias-ram/)
