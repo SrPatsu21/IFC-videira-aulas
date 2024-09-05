@@ -6,5 +6,5 @@ Build: ./main.cpp
 	echo "Ready"
 
 Run: Build
-	echo "start to run"
+	echo "start run"
 	./main.out
