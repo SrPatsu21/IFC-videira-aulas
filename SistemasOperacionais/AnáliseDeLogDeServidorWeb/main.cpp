@@ -4,7 +4,7 @@
 #include <string>
 #include <list>
 
-#define PACKAGE_SIZE 1000
+#define PACKAGE_SIZE 10000
 
 std::list<std::string>* createPackage(std::fstream* logf)
 {
@@ -13,7 +13,6 @@ std::list<std::string>* createPackage(std::fstream* logf)
     int count = 0;
     while (count < PACKAGE_SIZE && std::getline(*logf, helper))
     {
-        // std::cout << count << std::endl;
         new_package->push_back(helper);
         count++;
     }
@@ -42,7 +41,7 @@ int main()
         {
             thread_ids++;
             std::thread th(search, thread_ids, createPackage(&logf));
-            th.join();
+            th.detach();
         }
     }
     else
