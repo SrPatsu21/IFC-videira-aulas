@@ -54,6 +54,7 @@
         "list": "cpp",
         "regex": "cpp",
         "bitset": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "cstring": "cpp"
     }
 }

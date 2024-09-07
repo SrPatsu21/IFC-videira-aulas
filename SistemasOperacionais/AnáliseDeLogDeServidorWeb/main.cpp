@@ -3,10 +3,12 @@
 #include <thread> //* Threads
 #include <string> //* Strins functions
 #include <list> //* Linked list
-#include <regex>//* Regular Expression
+#include <regex> //* Regular Expression
+#include <cstring> //* strcpy()
 
 //* Number of lines that every thread will handle
 #define PACKAGE_SIZE 10000
+#define DAYHOURS 24
 
 //* Create a package, the threads will work on them
 std::list<std::string>* createPackage(std::fstream* logf)
@@ -35,7 +37,7 @@ class ThreadClass
 private:
     int id;
     int ok_200 = 0;
-    int hours[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    int hours[DAYHOURS] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     bool running = true;
 
     //* verify if status is 200 ok
@@ -51,12 +53,16 @@ private:
     void verifyHour(std::string str)
     {
         std::smatch match;
-        std::regex double_dot("(\\:[0-9]*\\:)");
+        std::regex double_dot("\\:([0-9]*)\\:");
+        std::regex number("[0-2][0-9]");
         while (regex_search(str, match, double_dot))
         {
-            regex_search(str, match, double_dot);
-            //! this shit
-            int helper = stoi(match.str(0));
+            std::string matched_str = match.str(0);
+            regex_search(matched_str, match, number);
+
+            matched_str = match.str(0);
+            int helper = std::stoi(matched_str);
+
             this->hours[helper]++;
             str = match.suffix().str();
         }
@@ -99,6 +105,14 @@ public:
         }
         std::cout << std::endl;
     }
+    void join(ThreadClass* other)
+    {
+        this->ok_200 += other->ok_200;
+        for (size_t i = 0; i < DAYHOURS; i++)
+        {
+            this->hours[i] += other->hours[i];
+        }
+    }
 };
 
 int main()
@@ -106,10 +120,11 @@ int main()
     int thread_ids = 0;
     //* file
     std::fstream logf;
-    logf.open("./access2.log");
+    logf.open("./access1.log");
     //* list of threads
     std::list<ThreadClass *> threads_list;
     std::list<ThreadClass *>::iterator it;
+    ThreadClass* join_all = new ThreadClass(0);
 
     if (logf.is_open())
     {
@@ -142,6 +157,9 @@ int main()
                     }else
                     {
                         (*it)->printValues();
+                        //* join values
+                        join_all->join((*it));
+                        //* delete
                         threads_list.erase(it++);
                     }
                 }
@@ -150,10 +168,14 @@ int main()
                 }else
                 {
                     (*it)->printValues();
+                    //* join values
+                    join_all->join((*it));
+                    //* delete
                     threads_list.erase(it);
                 }
             }
         }
+        join_all->printValues();
     }
     else
     {
