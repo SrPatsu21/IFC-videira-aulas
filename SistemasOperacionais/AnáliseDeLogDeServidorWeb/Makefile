@@ -8,3 +8,7 @@ Build: ./main.cpp
 Run: Build
 	echo "start run"
 	./main.out
+
+RunTime: Build
+	echo "start run on time"
+	time ./main.out
