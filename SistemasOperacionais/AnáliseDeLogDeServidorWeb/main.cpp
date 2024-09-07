@@ -37,6 +37,35 @@ private:
     int ok_200 = 0;
     int hours[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     bool running = true;
+
+    //* verify if status is 200 ok
+    void verifyOk200(std::string str)
+    {
+        if(std::regex_match (str, std::regex(".*(\\\".*\\\"\\ 200\\ ).*") ))
+        {
+            this->ok_200++;
+        }
+    }
+
+    //* verify the hour that the connection happened
+    void verifyHour(std::string str)
+    {
+        std::smatch match;
+        std::regex double_dot(".*(\\[\\:\\:.*\\]).*");
+        int pos[2];
+        regex_search(str, match, double_dot);
+        pos[0]=match.position(0);
+        pos[1]=match.position(1);
+        //* find the rest of the string.
+        str = match.suffix().str();
+        if (pos[1]-pos[0] <= 2)
+        {
+            str = str.substr(pos[0],pos[1]);
+            this->hours[std::stoi(str)]++;
+            std::cout << std::stoi(str) << std::endl;
+        }
+    }
+
 public:
     ThreadClass(int id)
     {
@@ -49,15 +78,12 @@ public:
         while (package->size())
         {
             std::string str = package->back();
-            // // +[0-9]\\.+[0-9]\\.+[0-9]\\.+[0-9]  - - \\[.*\\] \".*\" 200
-            // if(std::regex_match (str, std::regex("^([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\.)") ))
-            // {
-            //     this->ok_200++;
-            // }
-            if(true)
-            {
-                this->ok_200++;
-            }
+            //* ok 200
+            verifyOk200(str);
+            //* <https://www.geeksforgeeks.org/program-to-find-all-match-of-a-regex-in-a-string/>
+            //* find hour
+            verifyHour(str);
+            //* remove string from the list
             package->pop_back();
         }
         running = false;
@@ -84,7 +110,7 @@ int main()
     int thread_ids = 0;
     //* file
     std::fstream logf;
-    logf.open("./access1.log");
+    logf.open("./access2.log");
     //* list of threads
     std::list<ThreadClass *> threads_list;
     std::list<ThreadClass *>::iterator it;
