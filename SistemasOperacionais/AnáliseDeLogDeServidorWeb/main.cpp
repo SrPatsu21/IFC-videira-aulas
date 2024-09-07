@@ -51,18 +51,14 @@ private:
     void verifyHour(std::string str)
     {
         std::smatch match;
-        std::regex double_dot(".*(\\[\\:\\:.*\\]).*");
-        int pos[2];
-        regex_search(str, match, double_dot);
-        pos[0]=match.position(0);
-        pos[1]=match.position(1);
-        //* find the rest of the string.
-        str = match.suffix().str();
-        if (pos[1]-pos[0] <= 2)
+        std::regex double_dot("(\\:[0-9]*\\:)");
+        while (regex_search(str, match, double_dot))
         {
-            str = str.substr(pos[0],pos[1]);
-            this->hours[std::stoi(str)]++;
-            std::cout << std::stoi(str) << std::endl;
+            regex_search(str, match, double_dot);
+            //! this shit
+            int helper = stoi(match.str(0));
+            this->hours[helper]++;
+            str = match.suffix().str();
         }
     }
 
@@ -99,7 +95,7 @@ public:
         std::cout << this->id << " ended with, 200 status:" << ok_200 << ", hours:";
         for (size_t i = 0; i < 24; i++)
         {
-            std::cout << " " << hours[i];
+            std::cout << " " << this->hours[i];
         }
         std::cout << std::endl;
     }
