@@ -3,6 +3,7 @@
 #include <thread> //* Threads
 #include <string> //* Strins functions
 #include <list> //* Linked list
+#include <regex>//* Regular Expression
 
 //* Number of lines that every thread will handle
 #define PACKAGE_SIZE 10000
@@ -28,11 +29,55 @@ std::list<std::string>* createPackage(std::fstream* logf)
     return new_package;
 }
 
-//* thread
-void search(int id, std::list<std::string>* package)
+//* Thread Class
+class ThreadClass
 {
-    std::cout << id << " size:" << package->size() << std::endl;
-}
+private:
+    int id;
+    int ok_200 = 0;
+    int hours[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    bool running = true;
+public:
+    ThreadClass(int id)
+    {
+        this->id = id;
+    };
+    //* main function
+    void search(std::list<std::string>* package)
+    {
+        //* analysis package
+        while (package->size())
+        {
+            std::string str = package->back();
+            // // +[0-9]\\.+[0-9]\\.+[0-9]\\.+[0-9]  - - \\[.*\\] \".*\" 200
+            // if(std::regex_match (str, std::regex("^([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\.)") ))
+            // {
+            //     this->ok_200++;
+            // }
+            if(true)
+            {
+                this->ok_200++;
+            }
+            package->pop_back();
+        }
+        running = false;
+    }
+
+    bool isRunning()
+    {
+        return this->running;
+    }
+    void printValues()
+    {
+        //* print the results
+        std::cout << this->id << " ended with, 200 status:" << ok_200 << ", hours:";
+        for (size_t i = 0; i < 24; i++)
+        {
+            std::cout << " " << hours[i];
+        }
+        std::cout << std::endl;
+    }
+};
 
 int main()
 {
@@ -41,23 +86,57 @@ int main()
     std::fstream logf;
     logf.open("./access1.log");
     //* list of threads
-    std::list<std::thread *> threads_list;
+    std::list<ThreadClass *> threads_list;
+    std::list<ThreadClass *>::iterator it;
 
     if (logf.is_open())
     {
         //* thread loop
-        while (logf.is_open())
+        while (logf.is_open() || threads_list.size())
         {
-            thread_ids++;
-            //* add on list
-            // threads_list.push_back();
-            std::thread(search, thread_ids, createPackage(&logf)).detach();
-            //* like a join, but this loop won`t waint this thread
-            // threads_list.back()->detach();
+            if (logf.is_open())
+            {
+                thread_ids++;
+                //* create object
+                ThreadClass* thread_obj = new ThreadClass(thread_ids);
+                //* create package
+                std::list<std::string>* package = createPackage(&logf);
+                //* create and run the thread
+                std::cout << thread_ids << " started , package size:" << package->size() << std::endl;
+                std::thread(&ThreadClass::search, thread_obj, package).detach();
+                //* add on list
+                threads_list.push_back(thread_obj);
+            }
+
+            //* veryfy when threads end
+            it = threads_list.begin();
+            if (threads_list.size())
+            {
+                while ((*it) != (threads_list.back()))
+                {
+                    if ((*it)->isRunning())
+                    {
+                        ++it;
+                    }else
+                    {
+                        (*it)->printValues();
+                        threads_list.erase(it++);
+                    }
+                }
+                if ((*it)->isRunning())
+                {
+                }else
+                {
+                    (*it)->printValues();
+                    threads_list.erase(it);
+                }
+            }
         }
     }
     else
     {
         std::cout << "Unable to open file";
     }
+
+    return 0;
 }
