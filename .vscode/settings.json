@@ -55,6 +55,10 @@
         "regex": "cpp",
         "bitset": "cpp",
         "sstream": "cpp",
-        "cstring": "cpp"
+        "cstring": "cpp",
+        "threads.h": "c",
+        "unistd.h": "c",
+        "types.h": "c",
+        "stdio.h": "c"
     }
 }
