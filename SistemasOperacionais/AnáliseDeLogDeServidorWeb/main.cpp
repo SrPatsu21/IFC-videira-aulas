@@ -7,7 +7,7 @@
 #include <cstring> //* strcpy()
 
 //* Number of lines that every thread will handle
-#define PACKAGE_SIZE 100000
+#define PACKAGE_SIZE 10000
 #define DAYHOURS 24
 
 //* Create a package, the threads will work on them
@@ -118,6 +118,7 @@ public:
 int main()
 {
     int thread_ids = 0;
+    int maxthreads = std::thread::hardware_concurrency();
     //* file
     std::fstream logf;
     logf.open("./access1.log");
@@ -131,7 +132,7 @@ int main()
         //* thread loop
         while (logf.is_open() || threads_list.size())
         {
-            if (logf.is_open())
+            if (logf.is_open() && threads_list.size() < maxthreads)
             {
                 thread_ids++;
                 //* create object
@@ -176,6 +177,7 @@ int main()
             }
         }
         join_all->printValues();
+        std::cout << std::endl << std::endl;
     }
     else
     {
