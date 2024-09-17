@@ -48,7 +48,6 @@ private:
             this->ok_200++;
         }
     }
-
     //* verify the hour that the connection happened
     void verifyHour(std::string str)
     {
@@ -90,11 +89,12 @@ public:
         }
         running = false;
     }
-
+    //* verify if is running
     bool isRunning()
     {
         return this->running;
     }
+    //* print all values
     void printValues()
     {
         //* print the results
@@ -105,6 +105,7 @@ public:
         }
         std::cout << std::endl;
     }
+    //* join threads
     void join(ThreadClass* other)
     {
         this->ok_200 += other->ok_200;
