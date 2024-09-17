@@ -7,7 +7,7 @@
 #include <cstring> //* strcpy()
 
 //* Number of lines that every thread will handle
-#define PACKAGE_SIZE 10000
+#define PACKAGE_SIZE 100000
 #define DAYHOURS 24
 
 //* Create a package, the threads will work on them
@@ -43,7 +43,7 @@ private:
     //* verify if status is 200 ok
     void verifyOk200(std::string str)
     {
-        if(std::regex_match (str, std::regex(".*(\\\".*\\\"\\ 200\\ ).*") ))
+        if(std::regex_match (str, std::regex(".*(\\ 200\\ ).*") ))
         {
             this->ok_200++;
         }
