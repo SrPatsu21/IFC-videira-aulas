@@ -41,30 +41,17 @@ private:
     bool running = true;
 
     //* verify if status is 200 ok
-    void verifyOk200(std::string str)
+    void verifyOk200(std::smatch* match)
     {
-        if(std::regex_match (str, std::regex(".*(\\ 200\\ ).*") ))
-        {
+        if ((*match)[10].str() == "200") {
             this->ok_200++;
         }
     }
     //* verify the hour that the connection happened
-    void verifyHour(std::string str)
+    void verifyHour(std::smatch* match)
     {
-        std::smatch match;
-        std::regex double_dot("\\:([0-9]*)\\:");
-        std::regex number("[0-2][0-9]");
-        while (regex_search(str, match, double_dot))
-        {
-            std::string matched_str = match.str(0);
-            regex_search(matched_str, match, number);
-
-            matched_str = match.str(0);
-            int helper = std::stoi(matched_str);
-
-            this->hours[helper]++;
-            str = match.suffix().str();
-        }
+        int hour = stoi((*match)[5].str());
+        this->hours[hour]++;
     }
 
 public:
@@ -75,15 +62,25 @@ public:
     //* main function
     void search(std::list<std::string>* package)
     {
+        const std::regex _pattern {"^([0-9\\.]*)(?:\\s[^\\s]*\\s[^\\s]*\\s)(?:\\[)(\\d{2})(?:\\/)([a-zA-z]{3})(?:\\/)(\\d{4})(?:\\:)(\\d{2})(?:\\:)(\\d{2})(?:\\:)(\\d{2})(?:\\s)([\\+\\d]*)(?:\\])(?:\\s\")([^\"]*)(?:\"\\s)([\\d]*)(?:\\s)([\\d]*)(?:\\s\")([^\"]*\")(?:\\s\")([^\"]*\")(?:\\s\")(.[^\"]*\")$"};
         //* analysis package
         while (package->size())
         {
             std::string str = package->back();
-            //* ok 200
-            verifyOk200(str);
-            //* <https://www.geeksforgeeks.org/program-to-find-all-match-of-a-regex-in-a-string/>
-            //* find hour
-            verifyHour(str);
+            //* regex
+            std::smatch match;
+            std::regex_search(str, match, _pattern);
+            //* verify size
+            if (match.size() != 15)
+            {
+                std::cout << "Linha X veio com informação diferente do esperado!";
+            } else {
+                //* ok 200
+                verifyOk200(&match);
+                //* <https://www.geeksforgeeks.org/program-to-find-all-match-of-a-regex-in-a-string/>
+                //* find hour
+                verifyHour(&match);
+            }
             //* remove string from the list
             package->pop_back();
         }
