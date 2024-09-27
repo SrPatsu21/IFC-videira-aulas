@@ -43,29 +43,29 @@ private:
     //* verify if status is 200 ok
     void verifyOk200(std::string str)
     {
-        if(std::regex_match (str, std::regex(".*(\\ 200\\ ).*") ))
-        {
-            this->ok_200++;
-        }
+        // if(std::regex_match (str, std::regex(".*(\\ 200\\ ).*") ))
+        // {
+        //     this->ok_200++;
+        // }
     }
 
     //* verify the hour that the connection happened
     void verifyHour(std::string str)
     {
-        std::smatch match;
-        std::regex double_dot("\\:([0-9]*)\\:");
-        std::regex number("[0-2][0-9]");
-        while (regex_search(str, match, double_dot))
-        {
-            std::string matched_str = match.str(0);
-            regex_search(matched_str, match, number);
+        // std::smatch match;
+        // std::regex double_dot("\\:([0-9]*)\\:");
+        // std::regex number("[0-2][0-9]");
+        // while (regex_search(str, match, double_dot))
+        // {
+        //     std::string matched_str = match.str(0);
+        //     regex_search(matched_str, match, number);
 
-            matched_str = match.str(0);
-            int helper = std::stoi(matched_str);
+        //     matched_str = match.str(0);
+        //     int helper = std::stoi(matched_str);
 
-            this->hours[helper]++;
-            str = match.suffix().str();
-        }
+        //     this->hours[helper]++;
+        //     str = match.suffix().str();
+        // }
     }
 
 public:
