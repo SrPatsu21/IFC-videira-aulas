@@ -59,6 +59,7 @@
         "threads.h": "c",
         "unistd.h": "c",
         "types.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "sysinfo.h": "c"
     }
 }

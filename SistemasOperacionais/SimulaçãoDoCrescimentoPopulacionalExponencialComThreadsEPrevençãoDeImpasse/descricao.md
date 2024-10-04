@@ -10,13 +10,13 @@ Cada colônia de bactérias (representada por uma thread) precisa de recursos co
 
 1. Cada colônia segue a fórmula de crescimento exponencial:
 
-P(t)=P0⋅ert
+P(t)=P0⋅e^(rt)
 
-- P(t)P(t) é a população no tempo tt.
-- P0P0 é a população inicial.
-- rr é a taxa de crescimento.
-- tt é o tempo.
-- ee é a base dos logaritmos naturais.
+- P(t) é a população no tempo t.
+- P0 é a população inicial.
+- r é a taxa de crescimento.
+- t é o tempo.
+- e é a base dos logaritmos naturais.
 
 2. Para realizar cada etapa de crescimento, a colônia precisa de dois recursos compartilhados simultaneamente:
     - Recurso A: Por exemplo, nutrientes.

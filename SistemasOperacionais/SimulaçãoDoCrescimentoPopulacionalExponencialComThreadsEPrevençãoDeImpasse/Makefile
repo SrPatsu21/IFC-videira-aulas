@@ -1,10 +1,10 @@
-Libs =
+Libs = -pthread -lm
 
-Build: ./main.cpp
+Build: ./growth_simulation.c
 	echo "Building...\n"
-	g++ ${Libs} ./main.c -o ./main.out
+	gcc ./growth_simulation.c ${Libs} -o growth_simulation
 	echo "Ready"
 
 Run: Build
-	echo "start run"
-	./main.out
+	echo "Start run"
+	./growth_simulation
