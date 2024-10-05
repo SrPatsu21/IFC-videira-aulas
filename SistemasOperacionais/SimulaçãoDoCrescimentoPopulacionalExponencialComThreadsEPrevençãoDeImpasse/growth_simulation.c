@@ -2,9 +2,27 @@
 #include <stdlib.h>
 #include <math.h>
 #include <pthread.h>
-#include <unistd.h>
-#include <sys/sysinfo.h>
 #include <time.h>
+#include <setjmp.h> //try catch
+
+#ifdef __linux__
+    #include <unistd.h>
+#elif _WIN32
+    #include <windows.h>
+    #include <conio.h>
+
+    void usleep(int time)
+    {
+        Sleep(time/1000);
+    };
+#endif
+
+#define TRY do{ jmp_buf ex_buf__; switch( setjmp(ex_buf__) ){ case 0:
+#define CATCH(x) break; case x:
+#define ETRY } }while(0)
+#define THROW(x) longjmp(ex_buf__, x)
+#define TIME_OUT_EXCEPTION (1)
+
 
 #define NULL ((void *)0)
 
@@ -12,6 +30,7 @@ pthread_mutex_t space;
 pthread_mutex_t resource;
 int threads2run=0;
 pthread_mutex_t lockthreads2run;
+pthread_mutex_t stay_on;
 
 typedef struct Colony
 {
@@ -21,11 +40,15 @@ typedef struct Colony
 
 //* sub threads to run
 
-void* subThreads2Run()
+void subThreads2Run()
 {
   //wait to use
   pthread_mutex_lock(&lockthreads2run);
   threads2run--;
+  if (threads2run == 0)
+  {
+    pthread_mutex_unlock(&stay_on);
+  }
   pthread_mutex_unlock(&lockthreads2run);
 }
 
@@ -33,22 +56,22 @@ void* subThreads2Run()
 void* lockSpaceProvider()
 {
   //wait to use
-  pthread_mutex_lock(&space);
+  return pthread_mutex_lock(&space);
 }
 void unlockSpaceProvider()
 {
-    pthread_mutex_unlock(&space);
+  return pthread_mutex_unlock(&space);
 }
 
 //* Resource provider
-void* lockResourceProvider()
+int lockResourceProvider()
 {
   //wait to use
-    pthread_mutex_lock(&resource);
+  return pthread_mutex_lock(&resource);
 }
-void unlockResourceProvider()
+int unlockResourceProvider()
 {
-    pthread_mutex_unlock(&resource);
+  return pthread_mutex_unlock(&resource);
 }
 
 //* bacteria colony
@@ -78,26 +101,29 @@ void* bacteriaColony(void* colony)
   printf("thread %i start \n", cln->id);
 
   //*threads
-  // pthread_t thread_space_provider;
-  // pthread_t thread_resource_provaider;
-
-  // pthread_create(&thread_space_provider, NULL, &lockSpaceProvider, NULL);
-  // pthread_create(&thread_resource_provaider, NULL, &lockResourceProvider, NULL);
-
   for (size_t i = 0; i < cln->t; i++)
   {
-    // pthread_join(thread_space_provider, NULL);
-    // pthread_join(thread_resource_provaider, NULL);
+    //* https://web.archive.org/web/20091104065428/http://www.di.unipi.it/~nids/docs/longjump_try_trow_catch.html
+    // TRY
+    // {
+    //     printf("In Try Statement\n");
+    //     THROW( TIME_OUT_EXCEPTION );
+    //     printf("I do not appear\n");
+    // }
+    // CATCH( TIME_OUT_EXCEPTION )
+    // {
+    //     printf("thread %i wait too much and lost Resorce or Space\n", cln->id);
+    // }
     lockSpaceProvider();
     lockResourceProvider();
 
+    unlockSpaceProvider();
     usleep((rand()%10*100000));
 
     cln->population = cln->p0 * exp((cln->r*i));
 
     printf("thread %i grow, time=%i ,now pop=%lf \n", cln->id, ((int)i), cln->population);
 
-    unlockSpaceProvider();
     unlockResourceProvider();
   }
 
@@ -113,29 +139,24 @@ int main()
 {
   int p0=2, t=10;
   double r=1.2;
-
   //* how much threads
-  int cores= get_nprocs();
-  if (cores < 6)
-  {
-    cores = 6;
-  }
-  printf("Starting with %i colonies \n", cores);
+  int colony_number = 12;
+
+  printf("Starting with %i colonies \n", colony_number);
 
   //* thread array
-  pthread_t thread_point[cores];
+  pthread_t thread_point[colony_number];
   //* run threads
-  threads2run = cores;
-  for (int x = 0; x < cores; x++)
+  threads2run = colony_number;
+  pthread_mutex_lock(&stay_on);
+  for (int x = 0; x < colony_number; x++)
   {
     COLONY* cln = createColony(x, p0, t, 2.0, r);
     pthread_create(&thread_point[x], NULL, &bacteriaColony, cln);
     pthread_detach(thread_point[x]);
   }
   //*wait end
-  while (threads2run)
-  {
-  }
+  pthread_mutex_lock(&stay_on);
 
   return 0;
 }
