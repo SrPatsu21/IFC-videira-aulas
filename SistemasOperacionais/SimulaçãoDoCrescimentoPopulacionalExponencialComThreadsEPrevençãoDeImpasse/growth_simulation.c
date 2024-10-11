@@ -10,8 +10,10 @@
 #define THREAD_WORK_TIME 100000
 #define SECONDS_TO_TIMEOUT THREAD_WORK_TIME*20
 
-pthread_mutex_t space;
-pthread_mutex_t resource;
+pthread_mutex_t* space;
+pthread_mutex_t* resource;
+int space_array_size=0;
+int resorce_array_size=0;
 int threads2run=0;
 pthread_mutex_t lockthreads2run;
 pthread_mutex_t stay_on;
@@ -89,7 +91,7 @@ void* bacteriaColony(void* colony)
   {
     //* force deadlock
     // this or a semaphore
-    if (resource.__align)
+    if (*resource.__align)
     {
       //*lock
       lockSpaceProvider();
@@ -127,10 +129,22 @@ void* bacteriaColony(void* colony)
 //** main
 int main()
 {
-  int p0=2, t=10;
+  //* initial pop
+  int p0=2;
+  //* times
+  int t=10;
+  //* grow rate
   double r=1.2;
-  //* how much threads
+  //* how many threads
   int colony_number = 200;
+
+  //* how many resorces
+  space_array_size = 3;
+  resorce_array_size = 5;
+
+  //* mutex alloc
+  space=malloc(sizeof(pthread_mutex_t)*space_array_size);
+  resource=malloc(sizeof(pthread_mutex_t)*resorce_array_size);
 
   printf("Starting with %i colonies \n", colony_number);
 
