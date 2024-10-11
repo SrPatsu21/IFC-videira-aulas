@@ -3,28 +3,12 @@
 #include <math.h>
 #include <pthread.h>
 #include <time.h>
-#include <setjmp.h> //try catch
-
-#ifdef __linux__
-    #include <unistd.h>
-#elif _WIN32
-    #include <windows.h>
-    #include <conio.h>
-
-    void usleep(int time)
-    {
-        Sleep(time/1000);
-    };
-#endif
-
-#define TRY do{ jmp_buf ex_buf__; switch( setjmp(ex_buf__) ){ case 0:
-#define CATCH(x) break; case x:
-#define ETRY } }while(0)
-#define THROW(x) longjmp(ex_buf__, x)
-#define TIME_OUT_EXCEPTION (1)
-
+#include <unistd.h>
+#include <unistd.h>
 
 #define NULL ((void *)0)
+#define THREAD_WORK_TIME 100000
+#define SECONDS_TO_TIMEOUT THREAD_WORK_TIME*20
 
 pthread_mutex_t space;
 pthread_mutex_t resource;
@@ -53,25 +37,25 @@ void subThreads2Run()
 }
 
 //* Space provider
-void* lockSpaceProvider()
+void lockSpaceProvider()
 {
   //wait to use
-  return pthread_mutex_lock(&space);
+  pthread_mutex_lock(&space);
 }
 void unlockSpaceProvider()
 {
-  return pthread_mutex_unlock(&space);
+  pthread_mutex_unlock(&space);
 }
 
 //* Resource provider
-int lockResourceProvider()
+void lockResourceProvider()
 {
   //wait to use
-  return pthread_mutex_lock(&resource);
+  pthread_mutex_lock(&resource);
 }
-int unlockResourceProvider()
+void unlockResourceProvider()
 {
-  return pthread_mutex_unlock(&resource);
+  pthread_mutex_unlock(&resource);
 }
 
 //* bacteria colony
@@ -101,30 +85,36 @@ void* bacteriaColony(void* colony)
   printf("thread %i start \n", cln->id);
 
   //*threads
-  for (size_t i = 0; i < cln->t; i++)
+  for (size_t i = 0; i < cln->t; cln->t--)
   {
-    //* https://web.archive.org/web/20091104065428/http://www.di.unipi.it/~nids/docs/longjump_try_trow_catch.html
-    // TRY
-    // {
-    //     printf("In Try Statement\n");
-    //     THROW( TIME_OUT_EXCEPTION );
-    //     printf("I do not appear\n");
-    // }
-    // CATCH( TIME_OUT_EXCEPTION )
-    // {
-    //     printf("thread %i wait too much and lost Resorce or Space\n", cln->id);
-    // }
-    lockSpaceProvider();
-    lockResourceProvider();
+    //* force deadlock
+    // this or a semaphore
+    if (resource.__align)
+    {
+      //*lock
+      lockSpaceProvider();
+      lockResourceProvider();
+    }else
+    {
+      //*lock
+      lockResourceProvider();
+      lockSpaceProvider();
+    }
 
+    //* do samething with the resorces
+    //sleep is importante to force a deadlock
+    // usleep(THREAD_WORK_TIME);
+
+    //* unlock
     unlockSpaceProvider();
-    usleep((rand()%10*100000));
+    unlockResourceProvider();
 
+    //*calc
     cln->population = cln->p0 * exp((cln->r*i));
 
     printf("thread %i grow, time=%i ,now pop=%lf \n", cln->id, ((int)i), cln->population);
-
-    unlockResourceProvider();
+    //* rest
+    // usleep(int(THREAD_WORK_TIME/2));
   }
 
   printf("thread %i end with pop=%lf \n", cln->id, cln->population);
@@ -140,7 +130,7 @@ int main()
   int p0=2, t=10;
   double r=1.2;
   //* how much threads
-  int colony_number = 12;
+  int colony_number = 200;
 
   printf("Starting with %i colonies \n", colony_number);
 
