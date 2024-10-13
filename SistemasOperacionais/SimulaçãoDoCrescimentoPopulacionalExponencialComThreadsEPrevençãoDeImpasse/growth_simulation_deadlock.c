@@ -10,10 +10,17 @@
 #define THREAD_WORK_TIME 100000
 #define SECONDS_TO_TIMEOUT THREAD_WORK_TIME*20
 
+//* mutex array
 pthread_mutex_t* space;
 pthread_mutex_t* resource;
 int space_array_size=0;
 int resorce_array_size=0;
+//* wait list
+int* waiting_for_space;
+int* waiting_for_resource;
+pthread_mutex_t m_waiting_for_space;
+pthread_mutex_t m_waiting_for_resource;
+//* control main
 int threads2run=0;
 pthread_mutex_t lockthreads2run;
 pthread_mutex_t stay_on;
@@ -54,17 +61,28 @@ int lockSpaceProvider(COLONY* cln)
     }
   }
 
-  //! not working
   //* find the small and wait
   int small_index = 0;
   for (size_t i = 0; i < space_array_size; i++)
   {
-    if (&space[small_index].__align > &space[i].__align)
+    if (waiting_for_space[small_index] > waiting_for_space[i])
     {
       small_index=i;
     }
   }
+  //*list
+  pthread_mutex_lock(&m_waiting_for_space);
+  waiting_for_space[small_index]+=1;
+  pthread_mutex_unlock(&m_waiting_for_space);
+
+  //*lock
   pthread_mutex_lock(&space[small_index]);
+
+  //*list
+  pthread_mutex_lock(&m_waiting_for_space);
+  waiting_for_space[small_index]-=1;
+  pthread_mutex_unlock(&m_waiting_for_space);
+
   //* save to unlock late
   cln->m_space_index = small_index;
   return 2;
@@ -72,6 +90,7 @@ int lockSpaceProvider(COLONY* cln)
 void unlockSpaceProvider(COLONY* cln)
 {
   pthread_mutex_unlock(&space[cln->m_space_index]);
+  cln->m_space_index=-1;
 }
 
 //* Resource provider
@@ -96,12 +115,24 @@ int lockResourceProvider(COLONY* cln)
   int small_index = 0;
   for (size_t i = 0; i < resorce_array_size; i++)
   {
-    if (&resource[small_index].__align > &resource[i].__align)
+    if (waiting_for_resource[small_index] > waiting_for_resource[i])
     {
       small_index=i;
     }
   }
+  //*list
+  pthread_mutex_lock(&m_waiting_for_resource);
+  waiting_for_resource[small_index]+=1;
+  pthread_mutex_unlock(&m_waiting_for_resource);
+
+  //* wait
   pthread_mutex_lock(&resource[small_index]);
+
+  //*list
+  pthread_mutex_lock(&m_waiting_for_resource);
+  waiting_for_resource[small_index]-=1;
+  pthread_mutex_unlock(&m_waiting_for_resource);
+
   //* save to unlock late
   cln->m_resource_index = small_index;
   return 2;
@@ -109,6 +140,7 @@ int lockResourceProvider(COLONY* cln)
 void unlockResourceProvider(COLONY* cln)
 {
   pthread_mutex_unlock(&resource[cln->m_resource_index]);
+  cln->m_resource_index=-1;
 }
 
 //* bacteria colony
@@ -200,6 +232,10 @@ int main()
   //* mutex alloc
   space=(pthread_mutex_t*)malloc(sizeof(pthread_mutex_t)*space_array_size);
   resource=(pthread_mutex_t*)malloc(sizeof(pthread_mutex_t)*resorce_array_size);
+
+  //* wait list alloc
+  waiting_for_space=(int*)malloc(sizeof(int)*space_array_size);
+  waiting_for_resource=(int*)malloc(sizeof(int)*resorce_array_size);
 
   //*mutex init
   for (size_t i = 0; i < space_array_size; i++)
