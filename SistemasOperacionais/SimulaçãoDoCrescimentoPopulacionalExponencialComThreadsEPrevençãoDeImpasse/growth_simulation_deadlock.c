@@ -142,7 +142,7 @@ void unlockResourceProvider(COLONY* cln)
   cln->m_resource_index=-1;
 }
 
-//* bacteria colony
+//* bacterial colony
 COLONY* createColony(int id, int p0, int t, double population, double r)
 {
   COLONY* cln = (COLONY*) malloc(sizeof(COLONY));
@@ -163,7 +163,7 @@ COLONY* createColony(int id, int p0, int t, double population, double r)
   }
 }
 
-void* bacteriaColony(void* colony)
+void* bacterialColony(void* colony)
 {
   // fix pointer
   COLONY* cln = colony;
@@ -264,7 +264,7 @@ int main()
   for (int x = 0; x < colony_number; x++)
   {
     COLONY* cln = createColony(x, p0, t, 2.0, r);
-    pthread_create(&thread_point[x], NULL, &bacteriaColony, cln);
+    pthread_create(&thread_point[x], NULL, &bacterialColony, cln);
     pthread_detach(thread_point[x]);
   }
   //*wait end

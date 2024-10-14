@@ -8,7 +8,7 @@
 
 #define NULL ((void *)0)
 #define THREAD_WORK_TIME 100000
-#define SECONDS_TO_TIMEOUT THREAD_WORK_TIME*20
+#define SECONDS_TO_TIMEOUT THREAD_WORK_TIME*30
 
 //* mutex array
 pthread_mutex_t* space;
@@ -30,8 +30,10 @@ typedef struct Colony
     int id, p0, t, tn, m_space_index, m_resource_index;
     double population, r;
     //* thread addrs
-    pthread_mutex_t* self;
+    pthread_t* self;
 }COLONY;
+
+void* timeOut(void* colony);
 
 //* sub threads number to run
 void subThreads2Run()
@@ -145,29 +147,7 @@ void unlockResourceProvider(COLONY* cln)
   cln->m_resource_index=-1;
 }
 
-//* cancel thread and restart
-void* timeOut(void* colony)
-{
-  COLONY* cln = (COLONY*) colony;
-  int time = cln->tn;
-  usleep(SECONDS_TO_TIMEOUT);
-  if ((cln->m_resource_index == -1 || cln->m_space_index == -1) && cln->tn == time)
-  {
-    pthread_cancel(cln->self);
-    if (cln->m_resource_index==-1)
-    {
-      unlockResourceProvider(cln);
-    }
-    else
-    {
-      unlockSpaceProvider(cln);
-    }
-      // pthread_create(cln->self, NULL, &bacteriaColony, cln);
-      pthread_detach(cln->self);
-  }
-}
-
-//* bacteria colony
+//* bacterial colony
 COLONY* createColony(int id, int p0, int t, double population, double r)
 {
   COLONY* cln = (COLONY*) malloc(sizeof(COLONY));
@@ -189,30 +169,36 @@ COLONY* createColony(int id, int p0, int t, double population, double r)
   }
 }
 
-void* bacteriaColony(void* colony)
+void* bacterialColony(void* colony)
 {
   // fix pointer
   COLONY* cln = colony;
-  pthread_t time_out;
-  pthread_create(time_out, NULL, &bacteriaColony, cln);
-  pthread_detach(time_out);
   //*code
   printf("thread %i start \n", cln->id);
 
   //*threads
   for (cln->tn; cln->tn < cln->t; cln->tn++)
   {
+    //* timeout
+    pthread_t time_out;
+    pthread_create(time_out, NULL, &timeOut, cln);
     //* force deadlock
     // this or a semaphore
     if ((rand()%2) == 1)
     {
       //*lock
       lockSpaceProvider(cln);
+      //*timeout
+      pthread_detach(time_out);
+      //*lock
       lockResourceProvider(cln);
     }else
     {
       //*lock
       lockResourceProvider(cln);
+      //*timeout
+      pthread_detach(time_out);
+      //*lock
       lockSpaceProvider(cln);
     }
 
@@ -223,7 +209,7 @@ void* bacteriaColony(void* colony)
     //*calc
     cln->population = cln->p0 * exp((cln->r*cln->tn));
 
-    printf("thread %i grow, time=%i, resorces: s%i r%i ,now pop=%lf \n", cln->id, ((int)cln->tn), cln->m_space_index, cln->m_resource_index, cln->population);
+    printf("thread %03i grow, time=%03i, resorces: s%03i, r%03i ,now pop=%.2lf \n", cln->id, ((int)cln->tn), cln->m_space_index, cln->m_resource_index, cln->population);
 
     //* unlock
     unlockSpaceProvider(cln);
@@ -233,11 +219,40 @@ void* bacteriaColony(void* colony)
     usleep(THREAD_WORK_TIME/2);
   }
 
-  printf("thread %i end with pop=%lf \n", cln->id, cln->population);
+  printf("\033[0;32mthread %03i end with pop=%lf \033[0m\n", cln->id, cln->population);
   //*end
   subThreads2Run();
   // exit the current thread
   pthread_exit(NULL);
+}
+
+//* cancel thread and restart
+void* timeOut(void* colony)
+{
+  COLONY* cln = (COLONY*) colony;
+  int time = cln->tn;
+  //*wait
+  usleep(SECONDS_TO_TIMEOUT + (rand()%10000));
+  //* verify if run or running
+  if ((cln->m_resource_index == -1 || cln->m_space_index == -1) && cln->tn == time)
+  {
+    printf("\033[0;31mthread %03i, timeout in:%03i, with: s%i r%i \033[0m \n",cln->id, time,cln->m_space_index, cln->m_resource_index);
+    pthread_cancel(*(cln->self));
+    //* unlock resorce taked
+    if (cln->m_resource_index!=-1)
+    {
+      unlockResourceProvider(cln);
+    }
+    if(cln->m_space_index!=-1)
+    {
+      unlockSpaceProvider(cln);
+    }
+    //* remount thread
+    pthread_t new_thread;
+    cln->self = new_thread;
+    pthread_create(cln->self, NULL, &bacterialColony, cln);
+    pthread_detach(*(cln->self));
+  }
 }
 
 //* main
@@ -292,7 +307,7 @@ int main()
   for (int x = 0; x < colony_number; x++)
   {
     COLONY* cln = createColony(x, p0, t, 2.0, r);
-    pthread_create(&thread_point[x], NULL, &bacteriaColony, cln);
+    pthread_create(&thread_point[x], NULL, &bacterialColony, cln);
     cln->self=&thread_point[x];
     pthread_detach(thread_point[x]);
   }
