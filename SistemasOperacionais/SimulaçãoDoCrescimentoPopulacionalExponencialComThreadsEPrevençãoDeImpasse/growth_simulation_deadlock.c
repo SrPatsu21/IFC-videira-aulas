@@ -8,7 +8,6 @@
 
 #define NULL ((void *)0)
 #define THREAD_WORK_TIME 100000
-#define SECONDS_TO_TIMEOUT THREAD_WORK_TIME*20
 
 //* mutex array
 pthread_mutex_t* space;

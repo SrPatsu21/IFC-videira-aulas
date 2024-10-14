@@ -150,7 +150,7 @@ void* timeOut(void* colony)
 {
   COLONY* cln = (COLONY*) colony;
   int time = cln->tn;
-  usleep(THREAD_WORK_TIME*10);
+  usleep(SECONDS_TO_TIMEOUT);
   if ((cln->m_resource_index == -1 || cln->m_space_index == -1) && cln->tn == time)
   {
     pthread_cancel(cln->self);
