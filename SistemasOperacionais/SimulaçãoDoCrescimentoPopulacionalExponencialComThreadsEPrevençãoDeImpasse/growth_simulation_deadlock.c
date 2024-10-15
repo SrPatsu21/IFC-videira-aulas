@@ -31,6 +31,80 @@ typedef struct Colony
 }COLONY;
 
 //* sub threads number to run
+void subThreads2Run();
+//* Space provider
+int lockSpaceProvider(COLONY* cln);
+void unlockSpaceProvider(COLONY* cln);
+//* Resource provider
+int lockResourceProvider(COLONY* cln);
+void unlockResourceProvider(COLONY* cln);
+//* bacterial colony
+COLONY* createColony(int id, int p0, int t, double population, double r);
+//* thread
+void* bacterialColony(void* colony);
+
+//* main
+int main()
+{
+  //* initial pop
+  int p0=2;
+  //* times
+  int t=10;
+  //* grow rate
+  double r=1.2;
+  //* how many threads
+  int colony_number = 15;
+
+  //* how many resorces
+  space_array_size = 3;
+  resorce_array_size = 5;
+
+  //* mutex alloc
+  space=(pthread_mutex_t*)malloc(sizeof(pthread_mutex_t)*space_array_size);
+  resource=(pthread_mutex_t*)malloc(sizeof(pthread_mutex_t)*resorce_array_size);
+
+  //* wait list alloc
+  waiting_for_space=(int*)malloc(sizeof(int)*space_array_size);
+  waiting_for_resource=(int*)malloc(sizeof(int)*resorce_array_size);
+
+  //*mutex init
+  for (size_t i = 0; i < space_array_size; i++)
+  {
+    if (pthread_mutex_init(&(space[i]), NULL) != 0)
+    {
+      printf("\n mutex init has failed\n");
+      return 1;
+    }
+  }
+  for (size_t i = 0; i < resorce_array_size; i++)
+  {
+    if (pthread_mutex_init(&(resource[i]), NULL) != 0)
+    {
+      printf("\n mutex init has failed\n");
+      return 1;
+    }
+  }
+
+  printf("Starting with %i colonies \n", colony_number);
+
+  //* thread array
+  pthread_t thread_point[colony_number];
+  //* run threads
+  threads2run = colony_number;
+  pthread_mutex_lock(&stay_on);
+  for (int x = 0; x < colony_number; x++)
+  {
+    COLONY* cln = createColony(x, p0, t, 2.0, r);
+    pthread_create(&thread_point[x], NULL, &bacterialColony, cln);
+    pthread_detach(thread_point[x]);
+  }
+  //*wait end
+  pthread_mutex_lock(&stay_on);
+
+  return 0;
+}
+
+//* sub threads number to run
 void subThreads2Run()
 {
   //wait to use
@@ -109,7 +183,6 @@ int lockResourceProvider(COLONY* cln)
     }
   }
 
-  //!not working
   //* find the small and wait
   int small_index = 0;
   for (size_t i = 0; i < resorce_array_size; i++)
@@ -162,7 +235,7 @@ COLONY* createColony(int id, int p0, int t, double population, double r)
     return NULL;
   }
 }
-
+//* thread
 void* bacterialColony(void* colony)
 {
   // fix pointer
@@ -195,7 +268,7 @@ void* bacterialColony(void* colony)
     //*calc
     cln->population = cln->p0 * exp((cln->r*cln->tn));
 
-    printf("thread %i grow, time=%i, resorces: s%i r%i ,now pop=%lf \n", cln->id, ((int)cln->tn), cln->m_space_index, cln->m_resource_index, cln->population);
+    printf("thread %03i grow, time=%03i, resorces: s%03i, r%03i ,now pop=%.2lf \n", cln->id, ((int)cln->tn), cln->m_space_index, cln->m_resource_index, cln->population);
 
     //* unlock
     unlockSpaceProvider(cln);
@@ -205,70 +278,9 @@ void* bacterialColony(void* colony)
     usleep(THREAD_WORK_TIME/2);
   }
 
-  printf("thread %i end with pop=%lf \n", cln->id, cln->population);
+  printf("\033[0;32mthread %03i end with pop=%lf \033[0m\n", cln->id, cln->population);
   //*end
   subThreads2Run();
   // exit the current thread
   pthread_exit(NULL);
-}
-
-//* main
-int main()
-{
-  //* initial pop
-  int p0=2;
-  //* times
-  int t=10;
-  //* grow rate
-  double r=1.2;
-  //* how many threads
-  int colony_number = 15;
-
-  //* how many resorces
-  space_array_size = 3;
-  resorce_array_size = 5;
-
-  //* mutex alloc
-  space=(pthread_mutex_t*)malloc(sizeof(pthread_mutex_t)*space_array_size);
-  resource=(pthread_mutex_t*)malloc(sizeof(pthread_mutex_t)*resorce_array_size);
-
-  //* wait list alloc
-  waiting_for_space=(int*)malloc(sizeof(int)*space_array_size);
-  waiting_for_resource=(int*)malloc(sizeof(int)*resorce_array_size);
-
-  //*mutex init
-  for (size_t i = 0; i < space_array_size; i++)
-  {
-    if (pthread_mutex_init(&(space[i]), NULL) != 0)
-    {
-      printf("\n mutex init has failed\n");
-      return 1;
-    }
-  }
-  for (size_t i = 0; i < resorce_array_size; i++)
-  {
-    if (pthread_mutex_init(&(resource[i]), NULL) != 0)
-    {
-      printf("\n mutex init has failed\n");
-      return 1;
-    }
-  }
-
-  printf("Starting with %i colonies \n", colony_number);
-
-  //* thread array
-  pthread_t thread_point[colony_number];
-  //* run threads
-  threads2run = colony_number;
-  pthread_mutex_lock(&stay_on);
-  for (int x = 0; x < colony_number; x++)
-  {
-    COLONY* cln = createColony(x, p0, t, 2.0, r);
-    pthread_create(&thread_point[x], NULL, &bacterialColony, cln);
-    pthread_detach(thread_point[x]);
-  }
-  //*wait end
-  pthread_mutex_lock(&stay_on);
-
-  return 0;
 }

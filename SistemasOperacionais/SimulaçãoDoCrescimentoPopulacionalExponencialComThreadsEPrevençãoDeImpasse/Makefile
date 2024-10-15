@@ -7,7 +7,7 @@ BuildDeadLock: ./growth_simulation_deadlock.c
 
 RunDeadLock: BuildDeadLock
 	echo "Start run"
-	./growth_simulation_deadlock
+	time ./growth_simulation_deadlock
 
 BuildFix: ./growth_simulation_fix.c
 	echo "Building...\n"
@@ -16,4 +16,4 @@ BuildFix: ./growth_simulation_fix.c
 
 RunFix: BuildFix
 	echo "Start run"
-	./growth_simulation_fix
+	time ./growth_simulation_fix
