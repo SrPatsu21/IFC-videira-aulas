@@ -92,15 +92,30 @@ int main()
   //* run threads
   threads2run = colony_number;
   pthread_mutex_lock(&stay_on);
+
+  COLONY** cln_array = (COLONY**) malloc(sizeof(COLONY**));
+  for (size_t i = 0; i < colony_number; i++)
+  {
+    cln_array[i] = createColony(i, p0, t, p0, r);
+  }
   for (int x = 0; x < colony_number; x++)
   {
-    COLONY* cln = createColony(x, p0, t, 2.0, r);
-    pthread_create(&thread_point[x], NULL, &bacterialColony, cln);
+    pthread_create(&thread_point[x], NULL, &bacterialColony, cln_array[x]);
     pthread_detach(thread_point[x]);
   }
   //*wait end
   pthread_mutex_lock(&stay_on);
 
+  //*free
+  for (size_t i = 0; i < colony_number; i++)
+  {
+    free(cln_array[i]);
+  }
+  free(cln_array);
+  free(waiting_for_space);
+  free(waiting_for_resource);
+  free(resource);
+  free(space);
   return 0;
 }
 
